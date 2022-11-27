@@ -10,7 +10,6 @@ import UIKit
 class UserTableViewController: UITableViewController {
     let headerView = UserHeaderView()
     let footerView = FooterView()
-    
     let childCellId = "childCellId"
     let childRowHeight = 180
     let clearRowHeight = 80

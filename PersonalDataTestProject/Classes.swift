@@ -39,6 +39,8 @@ class UserTextField: UIView {
         addSubview(textField)
         textField.font = UIFont.systemFont(ofSize: 15)
         setupConstraints()
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectTextField))
+        self.addGestureRecognizer(tapGestureRecognizer)
     }
     
     private func setupConstraints() {
@@ -54,6 +56,9 @@ class UserTextField: UIView {
         }
     }
     
+    @objc private func selectTextField() {
+        textField.becomeFirstResponder()
+    }
 }
 
 class AddClearButton: UIButton {
