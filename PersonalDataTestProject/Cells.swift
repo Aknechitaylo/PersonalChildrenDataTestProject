@@ -10,8 +10,8 @@ import UIKit
 import SnapKit
 
 class ChildCell: UITableViewCell {
-    let nameField = UserTextField(title: "Имя", placeholder: "Введите имя ребёнка")
-    let ageField = UserTextField(title: "Возраст", placeholder: "Введите возраст ребёнка")
+    let nameField = UserTextField(title: "Имя", placeholder: "Введите имя ребёнка", keyboardType: .namePhonePad)
+    let ageField = UserTextField(title: "Возраст", placeholder: "Введите возраст ребёнка", keyboardType: .numberPad)
     let deleteButton = UIButton(type: .system)
     let staticFieldWidth = 210
     var delegate: ChildCellDelegate?
@@ -52,12 +52,17 @@ class ChildCell: UITableViewCell {
         }
     }
     
+    public func reset() {
+        nameField.textField.text = ""
+        ageField.textField.text = ""
+    }
+    
     @objc private func deleteButtonTouched() {
         self.delegate?.deleteButtonDidTouch(cell: self)
     }
 }
 
 protocol ChildCellDelegate {
-    func deleteButtonDidTouch(cell: UITableViewCell)
+    func deleteButtonDidTouch(cell: ChildCell)
 }
 

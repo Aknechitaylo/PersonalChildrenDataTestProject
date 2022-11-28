@@ -22,10 +22,11 @@ class UserTextField: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(title: String, placeholder: String) {
+    convenience init(title: String, placeholder: String, keyboardType: UIKeyboardType) {
         self.init(frame: CGRectZero)
         label.text = title
         textField.placeholder = placeholder
+        textField.keyboardType = keyboardType
         setupUI()
     }
     

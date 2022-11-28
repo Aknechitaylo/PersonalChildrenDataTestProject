@@ -11,10 +11,8 @@ class UserTableViewController: UITableViewController {
     let headerView = UserHeaderView()
     let footerView = FooterView()
     let childCellId = "childCellId"
-    let childRowHeight = 180
-    let clearRowHeight = 80
+    let childRowHeight: CGFloat = 180
     var rowsCount = 0
-    var uniqueCellTag = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,19 +40,33 @@ extension UserTableViewController {
     
     //MARK: TableViewDelegate
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 180
+        return childRowHeight
     }
     
     private func showResetContentAlert() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let resetAction = UIAlertAction(title: "Сбросить данные", style: .destructive) {_ in
-            self.rowsCount = 0
-            self.headerView.reset()
-            self.tableView.reloadData()
+            self.resetTableView()
         }
         alert.addAction(resetAction)
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         self.present(alert, animated: true)
+    }
+    
+    private func resetTableView() {
+        headerView.reset()
+        resetCells()
+        rowsCount = 0
+        tableView.reloadData()
+    }
+    
+    private func resetCells() {
+        guard rowsCount > 0 else { return }
+        for row in 1...rowsCount-1 {
+            let indexPath = IndexPath(row: row, section: 0)
+            let cell = tableView.cellForRow(at: indexPath) as! ChildCell
+            cell.reset()
+        }
     }
 }
 
@@ -64,8 +76,9 @@ extension UserTableViewController: AddClearButtonDelegate {
         switch sender.mode {
         case .add:
             rowsCount += 1
+            let indexPath = IndexPath(row: 0, section: 0)
             tableView.beginUpdates()
-            tableView.insertRows(at: [IndexPath(row: 0, section: 0)] , with: .automatic)
+            tableView.insertRows(at: [indexPath] , with: .automatic)
             tableView.endUpdates()
         case .clear:
             showResetContentAlert()
@@ -75,12 +88,14 @@ extension UserTableViewController: AddClearButtonDelegate {
 
 //MARK: AddClearButtonDelegate
 extension UserTableViewController: ChildCellDelegate {
-    func deleteButtonDidTouch(cell: UITableViewCell) {
+    func deleteButtonDidTouch(cell: ChildCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         rowsCount -= 1
-        tableView.beginUpdates()
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-        tableView.endUpdates()
+        tableView.performBatchUpdates({
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }) { finishes in
+            cell.reset()
+        }
     }
 }
 

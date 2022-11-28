@@ -11,8 +11,8 @@ import SnapKit
 class UserHeaderView: UIView {
     let titleLabel = UILabel()
     let titleFont = UIFont.boldSystemFont(ofSize: 18)
-    let nameField = UserTextField(title: "Имя", placeholder: "Введите имя")
-    let ageField = UserTextField(title: "Возраст", placeholder: "Введите возраст")
+    let nameField = UserTextField(title: "Имя", placeholder: "Введите имя", keyboardType: .namePhonePad)
+    let ageField = UserTextField(title: "Возраст", placeholder: "Введите возраст", keyboardType: .numberPad)
     let headerHeight = 230
     let headerWidth = UIScreen().bounds.width
     let childrenLabel = UILabel()
